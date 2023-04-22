@@ -26,27 +26,23 @@ namespace FoodAppAPI.Controllers
 
         // GET api/<MenuController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Menu> Get(string id)
         {
-            return "value";
+            return _menuService.Get(id);
         }
 
         // POST api/<MenuController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Menu> Post([FromBody] Menu menu)
         {
-        }
-
-        // PUT api/<MenuController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return _menuService.Create(menu);
         }
 
         // DELETE api/<MenuController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            _menuService.Delete(id);
         }
     }
 }

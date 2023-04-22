@@ -7,7 +7,7 @@ namespace FoodAppAPI.Services.Interfaces
         public Menu Create(Menu menu);
         public List<Menu> Get();
         public Menu Get(string id);
-        public void Update(string id, Menu menu);
+        public Menu Update(string id, Menu menu);
         public void Delete(string id);
     }
 }

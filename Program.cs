@@ -40,6 +40,13 @@ namespace FoodAppAPI
 
             app.UseAuthorization();
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>

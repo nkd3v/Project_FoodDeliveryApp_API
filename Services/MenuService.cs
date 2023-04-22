@@ -36,9 +36,10 @@ namespace FoodAppAPI.Services
             return _menus.Find(student => student.Id == id).FirstOrDefault();
         }
 
-        public void Update(string id, Menu menu)
+        public Menu Update(string id, Menu menu)
         {
             _menus.ReplaceOne(student => student.Id == id, menu);
+            return menu;
         }
     }
 }
