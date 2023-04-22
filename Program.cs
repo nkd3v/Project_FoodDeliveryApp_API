@@ -11,6 +11,9 @@ namespace FoodAppAPI
     {
         public static void Main(string[] args)
         {
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            var url = $"http://0.0.0.0:{port}";
+
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.Configure<MenuDatabaseSettings>(builder.Configuration.GetSection("FoodAppDatabaseSettings"));
@@ -34,8 +37,6 @@ namespace FoodAppAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
@@ -57,7 +58,7 @@ namespace FoodAppAPI
 
             app.MapControllers();
 
-            app.Run();
+            app.Run(url);
         }
     }
 }
