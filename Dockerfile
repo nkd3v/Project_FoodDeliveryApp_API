@@ -1,22 +1,23 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# This docker file uses multi-stage build strategy
+# to ensure optimal image build times and sizes
+# End result container image requires .NET runtime,
+# however creating it requires .NET SDK.
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
 WORKDIR /src
-COPY ["FoodAppAPI.csproj", "."]
-RUN dotnet restore "./FoodAppAPI.csproj"
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
+WORKDIR /src
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "FoodAppAPI.csproj" -c Release -o /app/build
+RUN dotnet restore FoodAppAPI.csproj
+RUN dotnet build "./FoodAppAPI.csproj" -c Debug -o /out
 
 FROM build AS publish
-RUN dotnet publish "FoodAppAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish FoodAppAPI.csproj -c Debug -o /out
 
+# Building final image used in running container
 FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FoodAppAPI.dll"]
+RUN apk update \
+    && apk add unzip procps
+WORKDIR /src
+COPY --from=publish /out .
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet FoodAppAPI.dll
