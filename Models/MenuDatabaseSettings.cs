@@ -1,6 +1,4 @@
-﻿using FoodAppAPI.Models.Interfaces;
-
-namespace FoodAppAPI.Models
+﻿namespace FoodAppAPI.Models
 {
     public class MenuDatabaseSettings : IMenuDatabaseSettings
     {
